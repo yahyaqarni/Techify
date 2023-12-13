@@ -2,14 +2,17 @@ import Header from "@/components/Header";
 import Featured from "@/components/Featured";
 import NewProducts from "@/components/NewProducts";
 import dbPool from "@/lib/db";
+import Session from "@/components/Session";
 
 export default function HomePage({ featuredProduct, newProducts }) {
   return (
-    <div>
-      <Header />
-      <Featured product={featuredProduct} />
-      <NewProducts products={newProducts} />
-    </div>
+    <Session>
+      <div>
+        <Header />
+        <Featured product={featuredProduct} />
+        <NewProducts products={newProducts} />
+      </div>
+    </Session>
   );
 }
 
@@ -28,7 +31,6 @@ export async function getServerSideProps() {
     .catch((err) => {
       console.log(err);
     });
-  console.log(newProducts);
   return {
     props: {
       featuredProduct: JSON.parse(JSON.stringify(rows[0])),

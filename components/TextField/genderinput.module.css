@@ -1,0 +1,31 @@
+.wrap{
+    display: flex;
+
+    flex-direction: column;
+    gap: .4rem;
+}
+
+.genderwrap{
+    display: flex;
+    flex-grow: 1;
+    background-color: #F0F0F0;
+    padding: 5px;
+    border-left: 08px solid #097FF5;
+    width: auto;
+}
+
+.select{
+    background-color: #F0F0F0;
+    border: none;
+    margin: 0;
+    font-weight: 100;
+    color: darkgray;
+    font-size: 0.9rem;
+    height: inherit;
+    width: max-content;
+    padding: 0;
+}
+
+.select:focus{
+    border: none;
+}

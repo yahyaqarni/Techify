@@ -1,0 +1,39 @@
+.inputbox{
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+.textField{
+    display: flex;
+    flex-grow: 1;
+    background-color: #F0F0F0;
+    padding: 10px;
+    border-left: 08px solid #097FF5;
+    width: auto;
+
+}
+
+.input{
+    background-color: #F0F0F0;
+    border: none;
+    margin: 0;
+    font-weight: 100;
+    color: darkgray;
+    font-size: 0.9rem;
+}
+
+
+.input:focus{
+    border: none;
+    margin: 0;
+    border-width: 0;
+    outline: none;
+    color: black;
+}
+
+.fieldLabel{
+    font-family: Rubik;
+    color: black;
+    font-weight: 200;
+    font-size: .9rem;
+}

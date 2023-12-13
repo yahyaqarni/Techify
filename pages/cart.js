@@ -7,6 +7,8 @@ import {CartContext} from "@/components/CartContext";
 import axios from "axios";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
+import { getSession, useSession } from "next-auth/react";
+import dbPool from "@/lib/db";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -66,15 +68,16 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
-export default function CartPage() {
+export default function CartPage({Address}) {
+  const { data: session } = useSession();
   const {cartProducts,addProduct,removeProduct,clearCart} = useContext(CartContext);
   const [products,setProducts] = useState([]);
-  const [name,setName] = useState('');
-  const [email,setEmail] = useState('');
-  const [city,setCity] = useState('');
-  const [postalCode,setPostalCode] = useState('');
-  const [streetAddress,setStreetAddress] = useState('');
-  const [country,setCountry] = useState('');
+  const [name,setName] = useState(session?.user?.name);
+  const [email,setEmail] = useState(session?.user?.email);
+  const [city,setCity] = useState(Address.city);
+  const [postalCode,setPostalCode] = useState(Address.zipcode);
+  const [streetAddress,setStreetAddress] = useState(Address.street);
+  const [country,setCountry] = useState(Address.country);
   const [isSuccess,setIsSuccess] = useState(false);
   useEffect(() => {
     if (cartProducts.length > 0) {
@@ -101,16 +104,18 @@ export default function CartPage() {
   function lessOfThisProduct(id) {
     removeProduct(id);
   }
+  let total = 0;
   async function goToPayment() {
+    const userid = session?.user?.id;
     const response = await axios.post('/api/checkout', {
-      name,email,city,postalCode,streetAddress,country,
-      cartProducts,
+      userid,total,cartProducts,
     });
-    if (response.data.url) {
-      window.location = response.data.url;
+    if (response) {
+      setIsSuccess(true);
+      clearCart();
     }
   }
-  let total = 0;
+  
   for (const productId of cartProducts) {
     const price = products.find(p => p.ProductID === productId)?.Price || 0;
     total += Number(price);
@@ -175,8 +180,13 @@ export default function CartPage() {
                   ))}
                   <tr>
                     <td></td>
-                    <td></td>
+                    <td>Total</td>
                     <td>${total}</td>
+                  </tr>
+                  <tr>
+                    <td><Button onClick={clearCart}>Clear Cart</Button></td>
+                    <td></td>
+                    <td></td>
                   </tr>
                 </tbody>
               </Table>
@@ -219,7 +229,7 @@ export default function CartPage() {
                      onChange={ev => setCountry(ev.target.value)}/>
               <Button black block
                       onClick={goToPayment}>
-                Continue to payment
+                Checkout
               </Button>
             </Box>
           )}
@@ -227,4 +237,23 @@ export default function CartPage() {
       </Center>
     </>
   );
+}
+
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  const UserID = session?.user?.id;
+  //console.log(UserID);
+  const poolPromise = dbPool.promise();
+  const [rows] = await poolPromise
+    .query("Select * from `Addresses` Where UserID = ?", [UserID])
+    .catch((err) => {
+      console.log(err);
+    });
+  //console.log(rows[0]);
+  return {
+    props: {
+      Address: JSON.parse(JSON.stringify(rows[0])),
+    },
+  };
 }
