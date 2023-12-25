@@ -10,6 +10,7 @@ const Bg = styled.div`
   background-color: #222;
   color:#fff;
   padding: 75px 0;
+  padding-bottom: 120px
 `;
 const Title = styled.h1`
   margin:0;

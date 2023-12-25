@@ -10,12 +10,31 @@ const StyledProductsGrid = styled.div`
   }
 `;
 
-export default function ProductsGrid({products}) {
-  return (
-    <StyledProductsGrid>
-      {products?.length > 0 && products.map(product => (
-        <ProductBox key={product.ProductID} {...product} />
-      ))}
-    </StyledProductsGrid>
-  );
+export default function ProductsGrid({ products, favids }) {
+  let productsWithLikeStatus = [];
+
+  if (products.length > 0) {
+    if (favids && favids.length > 0) {
+      productsWithLikeStatus = products.map(product => ({
+        ...product,
+        isLiked: favids.some(favProduct => favProduct.ProductID === product.ProductID),
+      }));
+    } else {
+      // If favids is empty, set isLiked to false for all products
+      productsWithLikeStatus = products.map(product => ({
+        ...product,
+        isLiked: false,
+      }));
+    }
+
+    return (
+      <StyledProductsGrid>
+        {productsWithLikeStatus.map(product => (
+          <ProductBox key={product.ProductID} {...product} />
+        ))}
+      </StyledProductsGrid>
+    );
+  } else {
+    return <div>No products available.</div>;
+  }
 }

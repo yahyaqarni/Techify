@@ -9,6 +9,7 @@ import Table from "@/components/Table";
 import Input from "@/components/Input";
 import { getSession, useSession } from "next-auth/react";
 import dbPool from "@/lib/db";
+import Footer from "@/components/Footer";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -234,6 +235,7 @@ export default function CartPage({Address}) {
             </Box>
           )}
         </ColumnsWrapper>
+        
       </Center>
     </>
   );

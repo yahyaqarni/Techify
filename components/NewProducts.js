@@ -9,11 +9,11 @@ const Title = styled.h2`
 `;
 
 
-export default function NewProducts({ products }) {
+export default function NewProducts({ products, favids }) {
   return (
     <Center>
       <Title>New Arrivals</Title>
-      <ProductsGrid products={products} />
+      <ProductsGrid products={products} favids={favids} />
     </Center>
   );
 }
