@@ -117,7 +117,7 @@ export default function Header() {
             </SearchWrap>
           </StyledNav>
           <ButtonWrapper>
-            <Button onClick={signOut} block>
+            <Button onClick={()=> {signOut({ callbackUrl: 'http://localhost:3000/' })}} block>
               Log Out
             </Button>
           </ButtonWrapper>

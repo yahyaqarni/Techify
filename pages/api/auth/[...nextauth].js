@@ -2,9 +2,11 @@ import NextAuth, { getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import dbPool from "@/lib/db";
 import bcrypt from 'bcrypt';
+import crypto from "crypto";
 
 const adminEmails = ["yahya@gmail.com"];
 const promisePool = dbPool.promise();
+
 export const authOptions = {
   secret: process.env.NEW_SECRET,
   providers: [
@@ -61,10 +63,6 @@ export const authOptions = {
       return session;
     },
 
-    async redirect({url, baseUrl}){
-      url = "/";
-      return url;
-    }
   },
 };
 

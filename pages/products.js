@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
     const session = await getSession(context);
 
     const [products] = await poolPromise.query(
-      "SELECT Products.*, Images.ImgURL FROM Products LEFT JOIN (SELECT ProductID, ImgURL FROM Images GROUP BY ProductID) AS Images ON Products.ProductID = Images.ProductID;"
+      "SELECT * FROM ProductsWithImages"
     );
 
     let productids = [];

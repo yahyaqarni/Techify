@@ -32,28 +32,28 @@ export async function getServerSideProps(context) {
   const session = await getSession(context);
   const [laptops] = await poolPromise
     .query(
-        "SELECT Products.*, Images.ImgURL FROM Products LEFT JOIN (SELECT ProductID, ImgURL FROM Images GROUP BY ProductID) AS Images ON Products.ProductID = Images.ProductID WHERE Products.CategoryID=4;")
+        "SELECT * FROM ProductsWithImages WHERE CategoryID=4;")
         .catch((err) => {
       console.log(err);
     });
 
     const [phones] = await poolPromise
     .query(
-        "SELECT Products.*, Images.ImgURL FROM Products LEFT JOIN (SELECT ProductID, ImgURL FROM Images GROUP BY ProductID) AS Images ON Products.ProductID = Images.ProductID WHERE Products.CategoryID=2;")
+        "SELECT * FROM ProductsWithImages WHERE CategoryID=2;")
     .catch((err) => {
       console.log(err);
     });
 
     const [watches] = await poolPromise
     .query(
-        "SELECT Products.*, Images.ImgURL FROM Products LEFT JOIN (SELECT ProductID, ImgURL FROM Images GROUP BY ProductID) AS Images ON Products.ProductID = Images.ProductID WHERE Products.CategoryID=5;")
+        "SELECT * FROM ProductsWithImages WHERE CategoryID=5;")
     .catch((err) => {
       console.log(err);
     });
 
     let productids = [];
     if (session?.user?.id) {
-      [productids] = await poolPromise.query("CALL GetWishlistProducts(?)", [
+      [productids] = await poolPromise.query("CALL GetWcishlistProducts(?)", [
         session.user.id,
       ]).catch(err=>{console.log(err)});
     }
